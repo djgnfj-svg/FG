@@ -76,3 +76,7 @@ crashlytics-build.properties
 Icon?
 ehthumbs.db
 Thumbs.db
+
+# Claude AI related
+CLAUDE.md
+.claude
