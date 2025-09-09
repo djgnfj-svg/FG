@@ -20,10 +20,13 @@ public class PlayerControll : MonoBehaviour
 		UpdateDash();
 		// 4) 빠른 낙하(↓ 홀드 → 빠르게 떨어짐)
 		UpdateDown();
+		Debug.Log("Update");
 	}
 
 	private void UpdateMove()
 	{
+		Debug.Log("Move");
+
 		// left, a = -1  /  none = 0  /  right, d = +1
 		float x = Input.GetAxisRaw("Horizontal");
 
@@ -35,6 +38,8 @@ public class PlayerControll : MonoBehaviour
 
 	private void UpdateJump()
 	{
+		Debug.Log("Jump");
+
 		if (Input.GetKeyDown(jumpKey))
 		{
 			movement2D.JumpTo();
@@ -43,6 +48,8 @@ public class PlayerControll : MonoBehaviour
 
 	private void UpdateDash()
 	{
+		Debug.Log("Dash");
+
 		if (Input.GetKeyDown(dashKey))
 		{
 			movement2D.DashTo();
@@ -52,6 +59,7 @@ public class PlayerControll : MonoBehaviour
 	private void UpdateDown()
 	{
 		movement2D.SetFastFallHold(Input.GetKey(KeyCode.DownArrow) || Input.GetKey(KeyCode.S));
+		Debug.Log("Move");
 		
 	}
 }
