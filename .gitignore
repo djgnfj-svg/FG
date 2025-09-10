@@ -80,3 +80,6 @@ Thumbs.db
 # Claude AI related
 CLAUDE.md
 .claude
+
+.vsconfig
+image.png
