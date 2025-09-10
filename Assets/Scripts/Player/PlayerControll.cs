@@ -10,32 +10,36 @@ public class PlayerControll : MonoBehaviour
 	private Rigidbody2D rb;
 	private MovementRigidbody2D movement2D;
 	Animator animator;
+	private SpriteRenderer spriteRenderer;
+
 
 	private void Awake()
 	{
 		movement2D = GetComponent<MovementRigidbody2D>();
 		animator = GetComponent<Animator>();
+		spriteRenderer = GetComponent<SpriteRenderer>();
 	}
 
 	private void Update()
 	{
+		transform.localScale = new Vector3(3f, 3f, 3f);
 		UpdateMove();
 		UpdateJump();
 		UpdateDash();
 		UpdateDown();
 		UpdateRoll();
 		if (animator && rb)
-			{
-				float speed = Mathf.Abs(rb.velocity.x);
-				animator.SetFloat("Speed", speed, 0.05f, Time.deltaTime); // 댐핑으로 깜빡임 감소
-			}
+		{
+			float speed = Mathf.Abs(rb.velocity.x);
+			animator.SetFloat("Speed", speed, 0.05f, Time.deltaTime); // 댐핑으로 깜빡임 감소
+		}
 	}
 
 	private void UpdateRoll()
 	{
 		if (Input.GetKeyDown(rollKey))
 		{
-		Debug.Log("FUcking Roll");
+			Debug.Log("FUcking Roll");
 			if (animator)
 			{
 				Debug.Log("HappyRoll Roll");
@@ -52,8 +56,12 @@ public class PlayerControll : MonoBehaviour
 
 		// 좌우 이동
 		movement2D.MoveTo(x);
-		if (x > 0) transform.localScale = new Vector3(1, 1, 1);
-		else if (x < 0) transform.localScale = new Vector3(-1, 1, 1);
+		// 원래 스케일 유지 + X 방향만 반전
+		if (x > 0)
+			spriteRenderer.flipX = false;
+		else if (x < 0)
+			spriteRenderer.flipX = true;
+
 	}
 
 	private void UpdateJump()
@@ -77,6 +85,6 @@ public class PlayerControll : MonoBehaviour
 	private void UpdateDown()
 	{
 		movement2D.SetFastFallHold(Input.GetKey(KeyCode.DownArrow) || Input.GetKey(KeyCode.S));
-		
+
 	}
 }
