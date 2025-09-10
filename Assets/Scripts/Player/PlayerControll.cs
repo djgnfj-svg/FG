@@ -6,11 +6,15 @@ public class PlayerControll : MonoBehaviour
 	private KeyCode jumpKey = KeyCode.Space;
 	private KeyCode dashKey = KeyCode.LeftShift;
 
+	private KeyCode rollKey = KeyCode.LeftControl;
+	private Rigidbody2D rb;
 	private MovementRigidbody2D movement2D;
+	Animator animator;
 
 	private void Awake()
 	{
 		movement2D = GetComponent<MovementRigidbody2D>();
+		animator = GetComponent<Animator>();
 	}
 
 	private void Update()
@@ -18,14 +22,30 @@ public class PlayerControll : MonoBehaviour
 		UpdateMove();
 		UpdateJump();
 		UpdateDash();
-		// 4) 빠른 낙하(↓ 홀드 → 빠르게 떨어짐)
 		UpdateDown();
-		Debug.Log("Update");
+		UpdateRoll();
+		if (animator && rb)
+			{
+				float speed = Mathf.Abs(rb.velocity.x);
+				animator.SetFloat("Speed", speed, 0.05f, Time.deltaTime); // 댐핑으로 깜빡임 감소
+			}
+	}
+
+	private void UpdateRoll()
+	{
+		if (Input.GetKeyDown(rollKey))
+		{
+		Debug.Log("FUcking Roll");
+			if (animator)
+			{
+				Debug.Log("HappyRoll Roll");
+				animator.SetTrigger("Roll");  // ✅ Animator Trigger("Roll")
+			}
+		}
 	}
 
 	private void UpdateMove()
 	{
-		Debug.Log("Move");
 
 		// left, a = -1  /  none = 0  /  right, d = +1
 		float x = Input.GetAxisRaw("Horizontal");
@@ -38,7 +58,6 @@ public class PlayerControll : MonoBehaviour
 
 	private void UpdateJump()
 	{
-		Debug.Log("Jump");
 
 		if (Input.GetKeyDown(jumpKey))
 		{
@@ -48,7 +67,6 @@ public class PlayerControll : MonoBehaviour
 
 	private void UpdateDash()
 	{
-		Debug.Log("Dash");
 
 		if (Input.GetKeyDown(dashKey))
 		{
@@ -59,7 +77,6 @@ public class PlayerControll : MonoBehaviour
 	private void UpdateDown()
 	{
 		movement2D.SetFastFallHold(Input.GetKey(KeyCode.DownArrow) || Input.GetKey(KeyCode.S));
-		Debug.Log("Move");
 		
 	}
 }
