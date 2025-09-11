@@ -293,7 +293,8 @@ GameObject:
   - component: {fileID: 776155114}
   - component: {fileID: 776155116}
   - component: {fileID: 776155117}
-  m_Layer: 0
+  - component: {fileID: 776155118}
+  m_Layer: 11
   m_Name: Monster
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -427,7 +428,7 @@ Rigidbody2D:
   m_Mass: 1
   m_LinearDrag: 0
   m_AngularDrag: 0.05
-  m_GravityScale: 1
+  m_GravityScale: 0.02
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -438,7 +439,23 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 0
+  m_Constraints: 4
+--- !u!114 &776155118
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 776155113}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 630d328c1bdeb474daf345e65344f2cf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  target: {fileID: 933026189}
+  speed: 3
+  chaseRange: 40
+  stopDistance: 0.5
 --- !u!1 &933026187
 GameObject:
   m_ObjectHideFlags: 0
@@ -455,9 +472,9 @@ GameObject:
   - component: {fileID: 933026194}
   - component: {fileID: 933026195}
   - component: {fileID: 933026196}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
