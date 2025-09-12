@@ -18,22 +18,16 @@ public class PlayerController : MonoBehaviour
     public float groundCheckRadius = 0.2f;
     public LayerMask groundLayerMask = 1;
 
-    [Header("Combat")]
-    public float attackRange = 1f;
-    public int attackDamage = 10;
-    public float attackCooldown = 0.5f;
 
     private Rigidbody2D rb;
     private bool isGrounded;
     private bool facingRight = true;
     private bool isDashing = false;
     private bool canDash = true;
-    private float lastAttackTime;
 
     private float horizontalInput;
     private bool jumpInput;
     private bool dashInput;
-    private bool attackInput;
 
     void Start()
     {
@@ -72,12 +66,6 @@ public class PlayerController : MonoBehaviour
         horizontalInput = Input.GetAxisRaw("Horizontal");
         jumpInput = Input.GetButtonDown("Jump");
         dashInput = Input.GetKeyDown(KeyCode.LeftShift);
-        attackInput = Input.GetButtonDown("Fire1") || Input.GetMouseButtonDown(0);
-
-        if (attackInput && Time.time >= lastAttackTime + attackCooldown)
-        {
-            Attack();
-        }
     }
 
     void CheckGrounded()
@@ -135,25 +123,6 @@ public class PlayerController : MonoBehaviour
         canDash = true;
     }
 
-    void Attack()
-    {
-        lastAttackTime = Time.time;
-
-        Vector2 attackPosition = transform.position;
-        attackPosition.x += (facingRight ? attackRange : -attackRange);
-
-        Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(attackPosition, attackRange);
-        
-        foreach (Collider2D enemy in hitEnemies)
-        {
-            if (enemy.gameObject != gameObject && enemy.CompareTag("Enemy"))
-            {
-                Debug.Log("Hit enemy: " + enemy.name);
-            }
-        }
-
-        Debug.Log("Player attacks!");
-    }
 
     void Flip()
     {
@@ -171,9 +140,5 @@ public class PlayerController : MonoBehaviour
             Gizmos.DrawWireSphere(groundCheck.position, groundCheckRadius);
         }
 
-        Gizmos.color = Color.blue;
-        Vector3 attackPos = transform.position;
-        attackPos.x += (facingRight ? attackRange : -attackRange);
-        Gizmos.DrawWireSphere(attackPos, attackRange);
     }
 }
