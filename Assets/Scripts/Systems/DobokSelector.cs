@@ -13,11 +13,15 @@ public class DobokSelector : MonoBehaviour
     
     [Header("UI Reference")]
     private DobokSelectionUI selectionUI;
+    
+    [Header("Spawner Reference")]
+    private DobokSpawner dobokSpawner;
 
     void Awake()
     {
         InitializeDoboks();
         selectionUI = FindObjectOfType<DobokSelectionUI>(true);
+        dobokSpawner = FindObjectOfType<DobokSpawner>();
     }
 
     void InitializeDoboks()
@@ -43,27 +47,39 @@ public class DobokSelector : MonoBehaviour
 
     public void ShowDobokSelection()
     {
+        Debug.Log("=== ShowDobokSelection() called ===");
+        
         // 랜덤으로 3개 도복 선택
         selectedDoboks.Clear();
         List<SimpleDobokData> tempList = new List<SimpleDobokData>(allDoboks);
+        
+        Debug.Log($"Available doboks: {allDoboks.Count}");
         
         for (int i = 0; i < 3 && tempList.Count > 0; i++)
         {
             int randomIndex = Random.Range(0, tempList.Count);
             selectedDoboks.Add(tempList[randomIndex]);
+            Debug.Log($"Selected dobok {i+1}: {tempList[randomIndex].dobokName}");
             tempList.RemoveAt(randomIndex);
         }
         
+        // Spawner로 도복 아이템 생성
+        if (dobokSpawner != null)
+        {
+            GameObject player = GameObject.FindGameObjectWithTag("Player");
+            Vector3 playerPos = player != null ? player.transform.position : transform.position;
+            dobokSpawner.SpawnDoboks(selectedDoboks, playerPos);
+            Debug.Log("Doboks spawned for selection!");
+            
+        }
         // UI에 표시
-        if (selectionUI != null)
+        else if (selectionUI != null)
         {
             selectionUI.ShowSelection(selectedDoboks);
         }
         else
         {
-            Debug.LogError("DobokSelectionUI not found! Creating simple selection...");
-            // UI가 없으면 자동으로 첫번째 선택
-            SelectDobok(0);
+            Debug.LogError("No DobokSpawner or UI found!");
         }
     }
 
@@ -117,5 +133,29 @@ public class DobokSelector : MonoBehaviour
     public List<SimpleDobokData> GetSelectedDoboks()
     {
         return selectedDoboks;
+    }
+    
+    // DobokPickup에서 호출되는 메서드
+    public void OnDobokPickupSelected(DobokPickup pickup)
+    {
+        if (pickup.dobokData != null)
+        {
+            currentDobok = pickup.dobokData;
+            ApplyDobokToPlayer();
+            
+            Debug.Log($"Dobok selected via pickup: {currentDobok.dobokName}");
+            
+            // 선택되지 않은 도복들 제거
+            if (dobokSpawner != null)
+            {
+                dobokSpawner.RemoveUnselectedDoboks();
+            }
+            
+            // StageManager에게 선택 완료 알림
+            if (StageManager.Instance != null)
+            {
+                StageManager.Instance.OnDobokSelected();
+            }
+        }
     }
 }
