@@ -52,12 +52,19 @@ public class MovementRigidbody2D : MonoBehaviour
 
 	private bool hasAirDashed = false;                 // 공중에서 이미 대시했는지
 	private bool wasGrounded = false;
+	
+	// 애니메이션 최적화
+	private float lastAnimSpeed = -1f;
+	
+	// 방향 제어
+	private PlayerControll playerControll;
 
 	private void Awake()
 	{
 		rigid2D = GetComponent<Rigidbody2D>();
 		collider2D = GetComponent<Collider2D>();
 		animator = GetComponent<Animator>();
+		playerControll = GetComponent<PlayerControll>();
 	}
 
 	private void FixedUpdate()
@@ -122,11 +129,8 @@ public class MovementRigidbody2D : MonoBehaviour
 		if (isDashing) return; // 대시 중이면 이동 입력 무시
 
 		rigid2D.velocity = new Vector2(x * moveSpeed, rigid2D.velocity.y);
-		// 절대값으로 속도 설정
-			// ✅ 항상 animator 값 갱신
-		float speed = Mathf.Abs(rigid2D.velocity.x);
-		if (speed < 0.05f) speed = 0;  // 아주 느린 속도는 0 처리
-		animator.SetFloat("Speed", speed); // ❌ 댐핑 제거!
+		// 애니메이션 최적화: 값이 변했을 때만 업데이트
+		UpdateAnimation();
 	}
 
 	/// <summary>
@@ -168,7 +172,8 @@ public class MovementRigidbody2D : MonoBehaviour
 		isDashing = true;
 		canDash = false;
 
-		float dir = Mathf.Sign(transform.localScale.x);
+		// PlayerControll의 실제 방향 정보 사용
+		float dir = (playerControll != null) ? playerControll.Facing : 1f;
 		// 수평 대시, 상승/낙하 가속도는 유지
 		rigid2D.velocity = new Vector2(dir * dashForce, rigid2D.velocity.y);
 
@@ -181,6 +186,22 @@ public class MovementRigidbody2D : MonoBehaviour
 		canDash = true;
 	}
 
-
+	/// <summary>
+	/// 애니메이션 최적화: 속도 값이 변했을 때만 animator 업데이트
+	/// </summary>
+	private void UpdateAnimation()
+	{
+		if (animator == null) return;
+		
+		float currentSpeed = Mathf.Abs(rigid2D.velocity.x);
+		if (currentSpeed < 0.05f) currentSpeed = 0f;  // 아주 느린 속도는 0 처리
+		
+		// 값이 충분히 변했을 때만 애니메이터 업데이트
+		if (Mathf.Abs(currentSpeed - lastAnimSpeed) > 0.01f)
+		{
+			animator.SetFloat("Speed", currentSpeed);
+			lastAnimSpeed = currentSpeed;
+		}
+	}
 
 }

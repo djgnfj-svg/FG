@@ -1866,8 +1866,7 @@ GameObject:
   - component: {fileID: 2013451382}
   - component: {fileID: 2013451381}
   - component: {fileID: 2013451380}
-  - component: {fileID: 2013451379}
-  - component: {fileID: 2013451378}
+  - component: {fileID: 2013451384}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -1875,55 +1874,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &2013451378
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2013451377}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8308105e8651b644daa32d2d981ac6af, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  maxHealth: 100
-  currentHealth: 0
-  maxMana: 50
-  currentMana: 0
-  invincibilityDuration: 1
-  flashInterval: 0.1
-  OnHealthChanged:
-    m_PersistentCalls:
-      m_Calls: []
-  OnManaChanged:
-    m_PersistentCalls:
-      m_Calls: []
-  OnPlayerDeath:
-    m_PersistentCalls:
-      m_Calls: []
---- !u!114 &2013451379
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2013451377}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0a0dc19968d5dee4c94dcce818ab550a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  moveSpeed: 5
-  jumpForce: 12
-  dashForce: 15
-  dashDuration: 0.2
-  dashCooldown: 1
-  groundCheck: {fileID: 0}
-  groundCheckRadius: 0.2
-  groundLayerMask:
-    serializedVersion: 2
-    m_Bits: 1
 --- !u!212 &2013451380
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -2063,6 +2013,21 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2013451384
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2013451377}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbc30284479b3fe4aae25e8f5aeded7a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  jumpKey: 32
+  dashKey: 304
+  rollKey: 306
 --- !u!1 &2106470955
 GameObject:
   m_ObjectHideFlags: 0

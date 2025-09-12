@@ -1,3 +1,8 @@
+/* 
+ * TODO: 체력 시스템 재구현 필요
+ * PlayerStats 클래스 의존성 제거 후 활성화
+ */
+/*
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -67,3 +72,4 @@ public class HealthBar : MonoBehaviour
         }
     }
 }
+*/
