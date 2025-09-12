@@ -74,8 +74,12 @@ public class StageManager : MonoBehaviour
         isStageCleared = true;
         Debug.Log($"Stage {currentStage} Cleared!");
         
-        // 도복 선택 UI 표시
-        StartCoroutine(ShowDobokSelection());
+        // 테스트용: 도복 선택 건너뛰고 바로 포탈 활성화
+        Debug.Log("TEST MODE: Skipping dobok selection, activating portal directly");
+        ActivatePortal();
+        
+        // 원래 코드 (나중에 복구용)
+        // StartCoroutine(ShowDobokSelection());
     }
 
     private IEnumerator ShowDobokSelection()
