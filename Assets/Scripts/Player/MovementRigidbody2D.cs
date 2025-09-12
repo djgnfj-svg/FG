@@ -8,7 +8,7 @@ public class MovementRigidbody2D : MonoBehaviour
 	// 이동 제어
 	[Header("Move Horizontal")]
 	[SerializeField]
-	private float moveSpeed = 8;      // 이동 속도
+	private float moveSpeed = 10;      // 이동 속도
 
 	//점프 제어
 	[Header("Move Vertical (Jump)")]
@@ -48,7 +48,8 @@ public class MovementRigidbody2D : MonoBehaviour
 	bool canDash = true;
 	// 대시 정책
 	[SerializeField] private bool allowAirDash = true; // 공중에서도 대시 허용할지
-	
+	private Animator animator;
+
 	private bool hasAirDashed = false;                 // 공중에서 이미 대시했는지
 	private bool wasGrounded = false;
 
@@ -56,7 +57,7 @@ public class MovementRigidbody2D : MonoBehaviour
 	{
 		rigid2D = GetComponent<Rigidbody2D>();
 		collider2D = GetComponent<Collider2D>();
-		Debug.Log("Move Awake");
+		animator = GetComponent<Animator>();
 	}
 
 	private void FixedUpdate()
@@ -69,7 +70,7 @@ public class MovementRigidbody2D : MonoBehaviour
 		footArea = new Vector2((bounds.max.x - bounds.min.x) * 0.5f, 0.2f);
 		// 플레이어의 발 위치에 박스를 생성하고, 박스가 바닥과 닿아있으면 isGrounded = true
 		isGrounded = Physics2D.OverlapBox(footPosition, footArea, 0, groundLayer);
-		
+
 		// 플레이어의 발이 땅에 닿아 있고, y축 속력이 0이하이면 점프 횟수 초기화
 		// y축 속력이 + 값이면 점프를 하는중..
 		if (isGrounded == true && rigid2D.velocity.y <= 0)
@@ -115,24 +116,17 @@ public class MovementRigidbody2D : MonoBehaviour
 
 
 	}
-	private void OnDrawGizmosSelected()
-{
-    if (!collider2D) collider2D = GetComponent<Collider2D>();
-    Bounds b = collider2D.bounds;
-    Vector2 probeCenter = new Vector2(b.center.x, b.min.y);
-    Vector2 probeSize = new Vector2((b.max.x - b.min.x) * 0.5f, 0.2f);
-
-    Gizmos.color = isGrounded ? Color.green : Color.red;
-    Gizmos.DrawWireCube(probeCenter, probeSize);
-}
-
 	/// x 이동 방향 설정 (외부 클래스에서 호출)
 	public void MoveTo(float x)
 	{
-		Debug.Log("Move MoveTo");
-
 		if (isDashing) return; // 대시 중이면 이동 입력 무시
+
 		rigid2D.velocity = new Vector2(x * moveSpeed, rigid2D.velocity.y);
+		// 절대값으로 속도 설정
+			// ✅ 항상 animator 값 갱신
+		float speed = Mathf.Abs(rigid2D.velocity.x);
+		if (speed < 0.05f) speed = 0;  // 아주 느린 속도는 0 처리
+		animator.SetFloat("Speed", speed); // ❌ 댐핑 제거!
 	}
 
 	/// <summary>
@@ -140,11 +134,8 @@ public class MovementRigidbody2D : MonoBehaviour
 	/// </summary>
 	public bool JumpTo()
 	{
-		Debug.Log("Move JumpTo");
-		Debug.Log("Jump : " + currentJumpCount);
 		if (currentJumpCount > 0)
 		{
-			Debug.Log("Jump!");
 			rigid2D.velocity = new Vector2(rigid2D.velocity.x, jumpForce);
 			currentJumpCount--;
 			return true;
@@ -159,7 +150,6 @@ public class MovementRigidbody2D : MonoBehaviour
 	// 대시 시도
 	public void DashTo()
 	{
-		Debug.Log("Dash" + isGrounded);
 		if (isDashing || !canDash) return;
 		// 공중일 때 정책 적용
 		if (!isGrounded)
@@ -175,7 +165,6 @@ public class MovementRigidbody2D : MonoBehaviour
 
 	private IEnumerator DashRoutine()
 	{
-		Debug.Log("Move 대쉬설정");
 		isDashing = true;
 		canDash = false;
 
