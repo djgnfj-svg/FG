@@ -5,11 +5,13 @@ public class PlayerControll : MonoBehaviour
     [SerializeField] private KeyCode jumpKey   = KeyCode.Space;
     [SerializeField] private KeyCode dashKey   = KeyCode.LeftShift;
     [SerializeField] private KeyCode rollKey   = KeyCode.LeftControl;
+    [SerializeField] private KeyCode attackKey = KeyCode.Z;
 
     private Rigidbody2D rb;
     private MovementRigidbody2D movement2D;
     private Animator animator;
     private SpriteRenderer spriteRenderer;
+    private PlayerAttack playerAttack;
 
     // 캐릭터 방향
     int facing = 1; // 1=오른쪽, -1=왼쪽
@@ -23,6 +25,7 @@ public class PlayerControll : MonoBehaviour
         animator = GetComponent<Animator>();
         spriteRenderer = GetComponent<SpriteRenderer>();
         rb = GetComponent<Rigidbody2D>();
+        playerAttack = GetComponent<PlayerAttack>();
         rb.constraints = RigidbodyConstraints2D.FreezeRotation;
     }
 
@@ -34,8 +37,8 @@ public class PlayerControll : MonoBehaviour
         // GameManager에서 저장된 도복 색상 적용
         ApplySavedDobokColor();
         
-        // 저장된 위치로 이동 (필요시)
-        ApplySavedPosition();
+        // SpawnPoint 시스템을 사용해서 위치 설정
+        ApplySpawnPoint();
     }
     
     void ApplySavedDobokColor()
@@ -51,8 +54,26 @@ public class PlayerControll : MonoBehaviour
         }
     }
     
+    void ApplySpawnPoint()
+    {
+        // 씬의 기본 SpawnPoint 찾기
+        SpawnPoint spawnPoint = SpawnPoint.GetDefaultSpawnPoint();
+        
+        if (spawnPoint != null)
+        {
+            transform.position = spawnPoint.transform.position;
+            Debug.Log($"[PlayerControll] Spawned at: {spawnPoint.spawnPointID} ({spawnPoint.transform.position})");
+        }
+        else
+        {
+            Debug.Log("[PlayerControll] No spawn point found - keeping current position");
+        }
+    }
+    
     void ApplySavedPosition()
     {
+        // 레거시 메서드 - SpawnPoint 시스템으로 대체됨
+        // 혹시 필요할 때를 위해 보관
         if (GameManager.Instance != null)
         {
             Vector3 savedPosition = GameManager.Instance.GetPlayerPosition();
@@ -90,6 +111,7 @@ public class PlayerControll : MonoBehaviour
         UpdateDash();
         UpdateDown();
         UpdateRoll();
+        UpdateAttack();
 
         // 애니메이션은 MovementRigidbody2D에서 처리하므로 여기서는 제거
     }
@@ -133,5 +155,20 @@ public class PlayerControll : MonoBehaviour
     private void UpdateDown()
     {
         movement2D.SetFastFallHold(Input.GetKey(KeyCode.DownArrow) || Input.GetKey(KeyCode.S));
+    }
+
+    private void UpdateAttack()
+    {
+        if (Input.GetKeyDown(attackKey))
+        {
+            if (playerAttack != null)
+            {
+                playerAttack.TryAttack();
+            }
+            else
+            {
+                Debug.LogWarning("[PlayerControll] PlayerAttack component not found!");
+            }
+        }
     }
 }
