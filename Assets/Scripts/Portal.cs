@@ -5,7 +5,7 @@ using System.Collections;
 public class Portal : MonoBehaviour
 {
     [Header("Portal Settings")]
-    public string nextSceneName = "GameScene2";
+    public string nextSceneName = "GameScene";
     public bool isActivated = false;
     
     [Header("Visual Settings")]
@@ -62,12 +62,10 @@ public class Portal : MonoBehaviour
             playerEntered = true;
             Debug.Log($"Portal entered! Moving to {nextSceneName}...");
             
-            // 플레이어 위치 저장
+            // 플레이어 데이터 저장 (위치는 저장하지 않음 - SpawnPoint 시스템 사용)
             if (GameManager.Instance != null)
             {
-                GameManager.Instance.SetPlayerPosition(other.transform.position);
-                
-                // PlayerStats가 있으면 데이터 저장
+                // PlayerStats가 있으면 체력/마나 데이터만 저장
                 PlayerStats playerStats = other.GetComponent<PlayerStats>();
                 if (playerStats != null)
                 {
@@ -75,12 +73,19 @@ public class Portal : MonoBehaviour
                 }
             }
             
-            // 스테이지 매니저가 있으면 사용, 없으면 직접 로드
-            if (StageManager.Instance != null)
+            // 현재 씬이 로비면 직접 씬 로드, 아니면 StageManager 사용
+            string currentSceneName = SceneManager.GetActiveScene().name;
+            
+            if (currentSceneName == "LobbyScene")
+            {
+                // 로비에서는 설정된 nextSceneName으로 직접 이동
+                SceneManager.LoadScene(nextSceneName);
+            }
+            else if (StageManager.Instance != null)
             {
                 if (nextSceneName == "TitleScene")
                 {
-                    // Stage 3 완료 - 타이틀로
+                    // Stage 완료 - 타이틀로
                     StageManager.Instance.ResetStageProgress();
                     
                     // 게임 완료 시 플레이어 데이터 리셋

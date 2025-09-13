@@ -27,6 +27,8 @@ public class StageManager : MonoBehaviour
     public int currentStage = 1;
     public const int MAX_STAGES = 2;  // 2스테이지만!
     
+    public int CurrentStage => currentStage;
+    
     [Header("Stage Scene Names")]
     private string[] stageSceneNames = new string[]
     {
@@ -50,9 +52,31 @@ public class StageManager : MonoBehaviour
             Destroy(gameObject);
         }
     }
+    
+    void OnEnable()
+    {
+        // 씬 로드 이벤트 구독
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+    
+    void OnDisable()
+    {
+        // 씬 로드 이벤트 구독 해제
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+    
+    void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        // 새로운 씬이 로드될 때마다 스테이지 클리어 상태 초기화
+        isStageCleared = false;
+        Debug.Log($"Scene loaded: {scene.name}, isStageCleared reset to false");
+    }
 
     void Start()
     {
+        // 씬이 변경되면 스테이지 클리어 상태 초기화
+        isStageCleared = false;
+        
         // 현재 씬 이름으로 스테이지 번호 판단
         string currentSceneName = SceneManager.GetActiveScene().name;
         for (int i = 0; i < stageSceneNames.Length; i++)
@@ -64,7 +88,7 @@ public class StageManager : MonoBehaviour
             }
         }
         
-        Debug.Log($"Current Stage: {currentStage}");
+        Debug.Log($"Current Stage: {currentStage}, isStageCleared: {isStageCleared}");
     }
 
     public void OnStageClear()
@@ -111,18 +135,27 @@ public class StageManager : MonoBehaviour
             portal.gameObject.SetActive(true);
             currentPortal = portal.gameObject;
             
-            // 포털에 다음 스테이지 설정
-            if (currentStage >= MAX_STAGES)
+            // 로비가 아닐 때만 포털의 다음 스테이지 설정
+            string currentSceneName = UnityEngine.SceneManagement.SceneManager.GetActiveScene().name;
+            if (currentSceneName != "LobbyScene")
             {
-                // Stage 3 클리어 시 타이틀로
-                portal.nextSceneName = "TitleScene";
-                Debug.Log("Final stage cleared! Portal will lead to Title.");
+                // 포털에 다음 스테이지 설정
+                if (currentStage >= MAX_STAGES)
+                {
+                    // Stage 2 클리어 시 타이틀로
+                    portal.nextSceneName = "TitleScene";
+                    Debug.Log("Final stage cleared! Portal will lead to Title.");
+                }
+                else
+                {
+                    // 다음 스테이지로
+                    portal.nextSceneName = stageSceneNames[currentStage]; // currentStage는 1부터 시작이므로 다음 스테이지 인덱스
+                    Debug.Log($"Portal will lead to Stage {currentStage + 1}: {portal.nextSceneName}");
+                }
             }
             else
             {
-                // 다음 스테이지로
-                portal.nextSceneName = stageSceneNames[currentStage]; // currentStage는 1부터 시작이므로 다음 스테이지 인덱스
-                Debug.Log($"Portal will lead to Stage {currentStage + 1}: {portal.nextSceneName}");
+                Debug.Log($"Lobby portal activated, keeping original destination: {portal.nextSceneName}");
             }
         }
         else

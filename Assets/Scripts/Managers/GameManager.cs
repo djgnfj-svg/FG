@@ -35,8 +35,14 @@ public class GameManager : MonoBehaviour
     public GameState CurrentState
     {
         get { return currentState; }
-        private set { currentState = value; }
+        private set 
+        { 
+            currentState = value; 
+            OnGameStateChanged?.Invoke(value);
+        }
     }
+    
+    public System.Action<GameState> OnGameStateChanged;
 
     private bool isPaused = false;
     public bool IsPaused => isPaused;
@@ -122,7 +128,7 @@ public class GameManager : MonoBehaviour
     {
         Time.timeScale = 1f;
         CurrentState = GameState.Playing;
-        SceneManager.LoadScene("GameScene");
+        SceneManager.LoadScene("LobbyScene");
     }
 
     public void RestartGame()
@@ -150,6 +156,29 @@ public class GameManager : MonoBehaviour
     public void Victory()
     {
         CurrentState = GameState.Victory;
+    }
+
+    public void StartNewGame()
+    {
+        ResetPlayerData();
+        LoadGameScene();
+    }
+
+    public void ContinueGame()
+    {
+        string sceneToLoad = HasGameData() ? playerData.lastSceneName : "GameScene";
+        SceneManager.LoadScene(sceneToLoad);
+    }
+
+    public bool HasGameData()
+    {
+        return !string.IsNullOrEmpty(playerData.lastSceneName);
+    }
+
+    public void LoadMainMenu()
+    {
+        Time.timeScale = 1f;
+        SceneManager.LoadScene("TitleScene");
     }
 
     // === Player Data Management ===
