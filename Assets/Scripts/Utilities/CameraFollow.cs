@@ -1,24 +1,22 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class CameraFollow : MonoBehaviour
 {
     [Header("Target Settings")]
-    public Transform target;
+    [SerializeField] private Transform target;
     
     [Header("Follow Settings")]
-    public float followSpeed = 2f;
-    public Vector3 offset = new Vector3(0, 1, -10);
+    [SerializeField] private float followSpeed = 2f;
+    [SerializeField] private Vector3 offset = new Vector3(0, 1, -10);
     
     [Header("Boundary Settings")]
-    public bool useBoundaries = true;
-    public Vector2 minBounds = new Vector2(-10, -5);
-    public Vector2 maxBounds = new Vector2(10, 5);
+    [SerializeField] private bool useBoundaries = true;
+    [SerializeField] private Vector2 minBounds = new Vector2(-10, -5);
+    [SerializeField] private Vector2 maxBounds = new Vector2(10, 5);
     
     [Header("Smooth Settings")]
-    public bool smoothFollow = true;
-    public float smoothTime = 0.3f;
+    [SerializeField] private bool smoothFollow = true;
+    [SerializeField] private float smoothTime = 0.3f;
     
     private Vector3 velocity = Vector3.zero;
     private Camera cam;

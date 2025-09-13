@@ -17,7 +17,7 @@ TagManager:
   - Foreground
   - Player
   - Enemy
-  - 
+  - Dobok
   - 
   - 
   - 
@@ -38,6 +38,15 @@ TagManager:
   - 
   - 
   m_SortingLayers:
+  - name: Background
+    uniqueID: 1703063039
+    locked: 0
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: Player
+    uniqueID: 2935474639
+    locked: 0
+  - name: UI
+    uniqueID: 2566645823
     locked: 0

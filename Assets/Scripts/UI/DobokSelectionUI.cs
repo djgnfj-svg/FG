@@ -7,16 +7,16 @@ using TMPro;
 public class DobokSelectionUI : MonoBehaviour
 {
     [Header("UI References")]
-    public GameObject selectionPanel;
-    public GameObject[] dobokButtons = new GameObject[3];
+    [SerializeField] private GameObject selectionPanel;
+    [SerializeField] private GameObject[] dobokButtons = new GameObject[3];
     
     [Header("UI Elements")]
-    public TextMeshProUGUI titleText;
-    public TextMeshProUGUI[] dobokNameTexts = new TextMeshProUGUI[3];
-    public Image[] dobokImages = new Image[3];
+    [SerializeField] private TextMeshProUGUI titleText;
+    [SerializeField] private TextMeshProUGUI[] dobokNameTexts = new TextMeshProUGUI[3];
+    [SerializeField] private Image[] dobokImages = new Image[3];
     
     [Header("Animation")]
-    public float fadeInDuration = 0.5f;
+    [SerializeField] private float fadeInDuration = 0.5f;
     
     private DobokSelector dobokSelector;
     private List<SimpleDobokData> currentDoboks;
@@ -99,7 +99,7 @@ public class DobokSelectionUI : MonoBehaviour
     {
         Debug.Log($"Dobok button {index} clicked!");
         
-        // 버튼 클릭 효과음 (나중에 추가 가능)
+        // 버튼 클릭 효과음 추가 지점
         
         // 도복 선택
         if (dobokSelector != null)

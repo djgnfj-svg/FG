@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 4667757011757891566}
   - component: {fileID: 4843468843742466169}
   - component: {fileID: 2192520600945732722}
+  - component: {fileID: 3897090249226415353}
   m_Layer: 10
   m_Name: Player
   m_TagString: Player
@@ -200,6 +201,7 @@ MonoBehaviour:
   jumpKey: 32
   dashKey: 304
   rollKey: 306
+  attackKey: 122
 --- !u!114 &2192520600945732722
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -228,3 +230,23 @@ MonoBehaviour:
   OnPlayerDeath:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &3897090249226415353
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2105464152055281480}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ba470865de5883346b72f967d1be1e86, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  attackDamage: 25
+  attackRange: 1.5
+  attackCooldown: 0.5
+  enemyLayer:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  attackPoint: {fileID: 0}
+  attackPointOffset: 1

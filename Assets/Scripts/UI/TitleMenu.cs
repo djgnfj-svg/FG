@@ -1,14 +1,12 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class TitleMenu : MonoBehaviour
 {
     [Header("UI References")]
-    public Button startButton;
-    public Button settingsButton;
-    public Button quitButton;
+    [SerializeField] private Button startButton;
+    [SerializeField] private Button settingsButton;
+    [SerializeField] private Button quitButton;
 
     void Start()
     {
@@ -35,7 +33,7 @@ public class TitleMenu : MonoBehaviour
 
     public void OpenSettings()
     {
-        Debug.Log("Settings menu not implemented yet");
+        Debug.Log("[TitleMenu] Opening settings menu");
     }
 
     public void QuitGame()
