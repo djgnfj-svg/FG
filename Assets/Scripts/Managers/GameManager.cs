@@ -41,6 +41,10 @@ public class GameManager : MonoBehaviour
     private bool isPaused = false;
     public bool IsPaused => isPaused;
 
+    [Header("Player Data Management")]
+    private PlayerData playerData = new PlayerData();
+    public PlayerData PlayerData => playerData;
+
     void Awake()
     {
         if (instance == null)
@@ -146,5 +150,68 @@ public class GameManager : MonoBehaviour
     public void Victory()
     {
         CurrentState = GameState.Victory;
+    }
+
+    // === Player Data Management ===
+    
+    public void SavePlayerData(PlayerStats playerStats)
+    {
+        if (playerStats == null) return;
+        
+        playerData.currentHealth = playerStats.currentHealth;
+        playerData.maxHealth = playerStats.maxHealth;
+        playerData.currentMana = playerStats.currentMana;
+        playerData.maxMana = playerStats.maxMana;
+        playerData.isInvincible = playerStats.isInvincible;
+        playerData.lastPosition = playerStats.transform.position;
+        playerData.lastSceneName = SceneManager.GetActiveScene().name;
+        
+        Debug.Log($"[GameManager] Player data saved - Health: {playerData.currentHealth}/{playerData.maxHealth}");
+    }
+    
+    public void LoadPlayerData(PlayerStats playerStats)
+    {
+        if (playerStats == null) return;
+        
+        playerStats.currentHealth = playerData.currentHealth;
+        playerStats.maxHealth = playerData.maxHealth;
+        playerStats.currentMana = playerData.currentMana;
+        playerStats.maxMana = playerData.maxMana;
+        playerStats.isInvincible = playerData.isInvincible;
+        
+        Debug.Log($"[GameManager] Player data loaded - Health: {playerData.currentHealth}/{playerData.maxHealth}");
+    }
+    
+    public void SetDobokColor(Color color)
+    {
+        playerData.dobokColor = color;
+        playerData.hasDobokSelected = true;
+        Debug.Log($"[GameManager] Dobok color saved: {color}");
+    }
+    
+    public Color GetDobokColor()
+    {
+        return playerData.dobokColor;
+    }
+    
+    public bool HasDobokSelected()
+    {
+        return playerData.hasDobokSelected;
+    }
+    
+    public void SetPlayerPosition(Vector3 position)
+    {
+        playerData.lastPosition = position;
+    }
+    
+    public Vector3 GetPlayerPosition()
+    {
+        return playerData.lastPosition;
+    }
+    
+    public void ResetPlayerData()
+    {
+        playerData.ResetToDefaults();
+        Debug.Log("[GameManager] Player data reset to defaults");
     }
 }

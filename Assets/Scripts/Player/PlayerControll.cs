@@ -30,6 +30,53 @@ public class PlayerControll : MonoBehaviour
     {
         // 스케일을 Start에서 한 번만 설정
         transform.localScale = new Vector3(1f, 1f, 1f);
+        
+        // GameManager에서 저장된 도복 색상 적용
+        ApplySavedDobokColor();
+        
+        // 저장된 위치로 이동 (필요시)
+        ApplySavedPosition();
+    }
+    
+    void ApplySavedDobokColor()
+    {
+        if (GameManager.Instance != null && GameManager.Instance.HasDobokSelected())
+        {
+            Color savedColor = GameManager.Instance.GetDobokColor();
+            if (spriteRenderer != null)
+            {
+                spriteRenderer.color = savedColor;
+                Debug.Log($"[PlayerControll] Applied saved dobok color: {savedColor}");
+            }
+        }
+    }
+    
+    void ApplySavedPosition()
+    {
+        if (GameManager.Instance != null)
+        {
+            Vector3 savedPosition = GameManager.Instance.GetPlayerPosition();
+            if (savedPosition != Vector3.zero)
+            {
+                transform.position = savedPosition;
+                Debug.Log($"[PlayerControll] Applied saved position: {savedPosition}");
+            }
+        }
+    }
+    
+    // 도복 색상 변경 메서드 (외부에서 호출 가능)
+    public void SetDobokColor(Color color)
+    {
+        if (spriteRenderer != null)
+        {
+            spriteRenderer.color = color;
+        }
+        
+        // GameManager에 저장
+        if (GameManager.Instance != null)
+        {
+            GameManager.Instance.SetDobokColor(color);
+        }
     }
 
     private void Update()

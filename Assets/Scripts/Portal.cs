@@ -62,6 +62,19 @@ public class Portal : MonoBehaviour
             playerEntered = true;
             Debug.Log($"Portal entered! Moving to {nextSceneName}...");
             
+            // 플레이어 위치 저장
+            if (GameManager.Instance != null)
+            {
+                GameManager.Instance.SetPlayerPosition(other.transform.position);
+                
+                // PlayerStats가 있으면 데이터 저장
+                PlayerStats playerStats = other.GetComponent<PlayerStats>();
+                if (playerStats != null)
+                {
+                    GameManager.Instance.SavePlayerData(playerStats);
+                }
+            }
+            
             // 스테이지 매니저가 있으면 사용, 없으면 직접 로드
             if (StageManager.Instance != null)
             {
@@ -69,6 +82,13 @@ public class Portal : MonoBehaviour
                 {
                     // Stage 3 완료 - 타이틀로
                     StageManager.Instance.ResetStageProgress();
+                    
+                    // 게임 완료 시 플레이어 데이터 리셋
+                    if (GameManager.Instance != null)
+                    {
+                        GameManager.Instance.ResetPlayerData();
+                    }
+                    
                     SceneManager.LoadScene("TitleScene");
                 }
                 else

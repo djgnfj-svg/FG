@@ -105,18 +105,32 @@ public class DobokSelector : MonoBehaviour
         GameObject player = GameObject.FindGameObjectWithTag("Player");
         if (player != null)
         {
-            // 플레이어 색상 변경
-            SpriteRenderer playerRenderer = player.GetComponent<SpriteRenderer>();
-            if (playerRenderer != null)
+            // PlayerControll의 SetDobokColor 메서드를 사용해서 GameManager에 자동 저장
+            PlayerControll playerControll = player.GetComponent<PlayerControll>();
+            if (playerControll != null)
             {
-                playerRenderer.color = currentDobok.tintColor;
-                Debug.Log($"Player color changed to {currentDobok.dobokName}");
+                playerControll.SetDobokColor(currentDobok.tintColor);
+                Debug.Log($"Player dobok changed to {currentDobok.dobokName} via PlayerControll");
+            }
+            else
+            {
+                // 백업: PlayerControll이 없으면 직접 적용
+                SpriteRenderer playerRenderer = player.GetComponent<SpriteRenderer>();
+                if (playerRenderer != null)
+                {
+                    playerRenderer.color = currentDobok.tintColor;
+                    Debug.Log($"Player color changed to {currentDobok.dobokName} (direct)");
+                }
             }
             
             // 나중에 스프라이트 교체 기능 추가 가능
             if (currentDobok.dobokSprite != null)
             {
-                playerRenderer.sprite = currentDobok.dobokSprite;
+                SpriteRenderer playerRenderer = player.GetComponent<SpriteRenderer>();
+                if (playerRenderer != null)
+                {
+                    playerRenderer.sprite = currentDobok.dobokSprite;
+                }
             }
         }
         else
