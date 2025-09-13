@@ -1,15 +1,14 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class PauseMenu : MonoBehaviour
 {
     [Header("UI References")]
-    public GameObject pauseMenuPanel;
-    public Button resumeButton;
-    public Button titleButton;
-    public Button quitButton;
+    [SerializeField] private GameObject pauseMenuPanel;
+    [SerializeField] private GameObject playerHUD;
+    [SerializeField] private Button resumeButton;
+    [SerializeField] private Button titleButton;
+    [SerializeField] private Button quitButton;
 
     void Start()
     {
@@ -40,6 +39,12 @@ public class PauseMenu : MonoBehaviour
         {
             pauseMenuPanel.SetActive(true);
         }
+        
+        // PlayerHUD 숨기기
+        if (playerHUD != null)
+        {
+            playerHUD.SetActive(false);
+        }
     }
 
     public void HidePauseMenu()
@@ -47,6 +52,12 @@ public class PauseMenu : MonoBehaviour
         if (pauseMenuPanel != null)
         {
             pauseMenuPanel.SetActive(false);
+        }
+        
+        // PlayerHUD 다시 보이기
+        if (playerHUD != null)
+        {
+            playerHUD.SetActive(true);
         }
     }
 

@@ -1,22 +1,20 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class HealthBar : MonoBehaviour
 {
     [Header("UI References")]
-    public Slider healthSlider;
-    public Image fillImage;
+    [SerializeField] private Slider healthSlider;
+    [SerializeField] private Image fillImage;
     
     [Header("Colors")]
-    public Color highHealthColor = Color.green;
-    public Color mediumHealthColor = Color.yellow;
-    public Color lowHealthColor = Color.red;
+    [SerializeField] private Color highHealthColor = Color.green;
+    [SerializeField] private Color mediumHealthColor = Color.yellow;
+    [SerializeField] private Color lowHealthColor = Color.red;
     
     [Header("Thresholds")]
-    public float mediumHealthThreshold = 0.6f;
-    public float lowHealthThreshold = 0.3f;
+    [SerializeField] private float mediumHealthThreshold = 0.6f;
+    [SerializeField] private float lowHealthThreshold = 0.3f;
 
     private PlayerStats playerStats;
 
