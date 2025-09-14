@@ -1897,6 +1897,27 @@ PlatformEffector2D:
   m_UseSideFriction: 0
   m_UseSideBounce: 0
   m_SideArc: 1
+--- !u!95 &1758378289
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1758378279}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: ac895321a12163e458d2a057ba2bc7da, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &1807989922 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 7641101836986433942, guid: 619e3b7120d0f9243867ea10b83d4617, type: 3}
@@ -1967,6 +1988,22 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 343995365627273024, guid: 5ffb6b28c51794e49aab33b142546803, type: 3}
+      propertyPath: m_Size.x
+      value: 0.32
+      objectReference: {fileID: 0}
+    - target: {fileID: 343995365627273024, guid: 5ffb6b28c51794e49aab33b142546803, type: 3}
+      propertyPath: m_Size.y
+      value: 0.48
+      objectReference: {fileID: 0}
+    - target: {fileID: 343995365627273024, guid: 5ffb6b28c51794e49aab33b142546803, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: ce1a6e059d50a624190fc83ff8f4211e, type: 3}
+    - target: {fileID: 343995365627273024, guid: 5ffb6b28c51794e49aab33b142546803, type: 3}
+      propertyPath: m_WasSpriteAssigned
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1880517602474006356, guid: 5ffb6b28c51794e49aab33b142546803, type: 3}
       propertyPath: m_LocalPosition.x
       value: -8.006
@@ -2022,6 +2059,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 2105464152055281480, guid: 5ffb6b28c51794e49aab33b142546803, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1758378288}
+    - targetCorrespondingSourceObject: {fileID: 2105464152055281480, guid: 5ffb6b28c51794e49aab33b142546803, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1758378289}
   m_SourcePrefab: {fileID: 100100000, guid: 5ffb6b28c51794e49aab33b142546803, type: 3}
 --- !u!1001 &1633255947508193432
 PrefabInstance:
