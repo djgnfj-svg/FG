@@ -28,6 +28,7 @@ public class EnemyController : MonoBehaviour
     private int patrolDirection = 1;
     private float lastAttackTime;
     private bool playerInRange = false;
+    private bool isDestroyScheduled = false;
     
     private Rigidbody2D rb;
     private SpriteRenderer spriteRenderer;
@@ -62,10 +63,15 @@ public class EnemyController : MonoBehaviour
         if (enemyStats != null && enemyStats.IsDead)
         {
             ChangeState(EnemyState.Dead);
-            return;
         }
 
-        DetectPlayer();
+        // Dead 상태가 아닐 때만 플레이어 감지
+        if (currentState != EnemyState.Dead)
+        {
+            DetectPlayer();
+        }
+
+        // 항상 현재 상태 실행
         ExecuteCurrentState();
     }
 
@@ -210,16 +216,73 @@ public class EnemyController : MonoBehaviour
 
     void ExecuteDead()
     {
-        rb.velocity = new Vector2(0, rb.velocity.y);
-        
-        if (animator != null)
+        // 한 번만 Destroy 호출
+        if (!isDestroyScheduled)
         {
-            animator.SetFloat("Speed", 0f);
-            animator.SetBool("IsDead", true);
+            isDestroyScheduled = true;
+
+            // 물리 완전 정지 (떨어지지 않게)
+            rb.velocity = Vector2.zero;
+            rb.gravityScale = 0f;
+            rb.isKinematic = true;
+
+            // Collider 비활성화 (즉시 충돌 방지)
+            Collider2D collider = GetComponent<Collider2D>();
+            if (collider != null)
+            {
+                collider.enabled = false;
+            }
+
+            if (animator != null)
+            {
+                animator.SetFloat("Speed", 0f);
+                animator.SetBool("IsDead", true);
+            }
+
+            // 사망 효과 실행
+            StartCoroutine(DeathEffect());
         }
-        
-        // 일정 시간 후 오브젝트 제거 (선택사항)
-        Destroy(gameObject, 2f);
+    }
+
+    System.Collections.IEnumerator DeathEffect()
+    {
+        // 파편화 효과 (페이드 아웃 + 크기 축소)
+        float deathDuration = 0.5f;
+        float elapsedTime = 0f;
+        Vector3 originalScale = transform.localScale;
+
+        SpriteRenderer sprite = GetComponent<SpriteRenderer>();
+        Color originalColor = sprite != null ? sprite.color : Color.white;
+
+        while (elapsedTime < deathDuration)
+        {
+            elapsedTime += Time.deltaTime;
+            float progress = elapsedTime / deathDuration;
+
+            // 크기 축소 (파편화 느낌)
+            transform.localScale = originalScale * (1f - progress * 0.5f);
+
+            // 페이드 아웃
+            if (sprite != null)
+            {
+                Color newColor = originalColor;
+                newColor.a = 1f - progress;
+                sprite.color = newColor;
+            }
+
+            // 약간 회전 (파편화 효과)
+            transform.rotation = Quaternion.Euler(0, 0, progress * 90f);
+
+            yield return null;
+        }
+
+        // 오브젝트 제거
+        Destroy(gameObject);
+    }
+
+    void OnDestroy()
+    {
+        Debug.Log($"[EnemyController] {name} was destroyed!");
     }
 
     void PerformAttack()
