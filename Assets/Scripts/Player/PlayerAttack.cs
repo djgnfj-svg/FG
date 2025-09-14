@@ -98,16 +98,6 @@ public class PlayerAttack : MonoBehaviour
                 enemyStats.TakeDamage(attackDamage);
                 Debug.Log($"[PlayerAttack] Dealt {attackDamage} damage to {enemy.name}");
             }
-            else
-            {
-                // 기존 적 AI (EnemyAI.cs) 처리
-                EnemyAI enemyAI = enemy.GetComponent<EnemyAI>();
-                if (enemyAI != null)
-                {
-                    Destroy(enemy.gameObject);
-                    Debug.Log($"[PlayerAttack] Destroyed enemy: {enemy.name}");
-                }
-            }
         }
 
         // 공격 이펙트 생성 (선택사항)
