@@ -37,14 +37,35 @@ public class CameraFollow : MonoBehaviour
 
     void LateUpdate()
     {
-        if (target == null) return;
+        if (target == null)
+        {
+            Debug.Log("[CameraFollow] Target is null!");
+            return;
+        }
 
         Vector3 targetPosition = target.position + offset;
 
         if (useBoundaries)
         {
-            targetPosition.x = Mathf.Clamp(targetPosition.x, minBounds.x, maxBounds.x);
-            targetPosition.y = Mathf.Clamp(targetPosition.y, minBounds.y, maxBounds.y);
+            // 카메라 뷰포트 크기 계산
+            float cameraHeight = cam.orthographicSize * 2f;
+            float cameraWidth = cameraHeight * cam.aspect;
+
+            // 실제 경계는 카메라 크기의 절반만큼 안쪽으로
+            float adjustedMinX = minBounds.x + cameraWidth / 2f;
+            float adjustedMaxX = maxBounds.x - cameraWidth / 2f;
+            float adjustedMinY = minBounds.y + cameraHeight / 2f;
+            float adjustedMaxY = maxBounds.y - cameraHeight / 2f;
+
+            Vector3 originalPos = targetPosition;
+            targetPosition.x = Mathf.Clamp(targetPosition.x, adjustedMinX, adjustedMaxX);
+            targetPosition.y = Mathf.Clamp(targetPosition.y, adjustedMinY, adjustedMaxY);
+
+            // 경계 적용 여부 확인
+            if (originalPos.x != targetPosition.x || originalPos.y != targetPosition.y)
+            {
+                Debug.Log($"[CameraFollow] BOUNDARY APPLIED! Camera won't show beyond bounds!");
+            }
         }
 
         if (smoothFollow)
