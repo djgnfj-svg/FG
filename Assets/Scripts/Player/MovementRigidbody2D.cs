@@ -8,7 +8,7 @@ public class MovementRigidbody2D : MonoBehaviour
 	// 이동 제어
 	[Header("Move Horizontal")]
 	[SerializeField]
-	private float moveSpeed = 10;      // 이동 속도
+	private float moveSpeed = 5;      // 이동 속도
 
 	//점프 제어
 	[Header("Move Vertical (Jump)")]
